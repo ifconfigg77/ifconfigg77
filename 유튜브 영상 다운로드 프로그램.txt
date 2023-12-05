@@ -1,0 +1,37 @@
+from pytube import YouTube
+
+url = 'https://www.youtube.com/watch?v=4ASVa2HPr6M&t=9s'
+
+yt = YouTube(url)
+title = yt.title
+
+print("[영상 제목]", yt.title)  # 영상제목
+print("[영상 게시자]", yt.author) # 영상 게시자
+print("[조회수]", yt.views)
+print("[평균평점]", yt.rating) # 평균 평점
+print("[영상길이(초)]", yt.length)
+print("[연령제한여부]", yt.age_restricted)
+print("[영상 설명]", yt.description) # 영상 설명
+print("[썸네일URL]", yt.thumbnail_url,"\n\n") # 썸네일 url 주소
+
+
+def on_progress(vid, chunk, bytes_remaining):
+    total_size = vid.filesize
+    bytes_downloaded = total_size - bytes_remaining
+    percentage_of_completion = bytes_downloaded / total_size * 100
+    totalsz = (total_size/1024)/1024
+    totalsz = round(totalsz,1)
+    remain = (bytes_remaining / 1024) / 1024
+    remain = round(remain, 1)
+    dwnd = (bytes_downloaded / 1024) / 1024
+    dwnd = round(dwnd, 1)
+    percentage_of_completion = round(percentage_of_completion,2)
+
+    #print(f'Total Size: {totalsz} MB')
+    print(f'Download Progress: {percentage_of_completion}%, Total Size:{totalsz} MB, Downloaded: {dwnd} MB, Remaining:{remain} MB')
+
+yt = YouTube(url, on_progress_callback=on_progress).streams.filter(res="720p").first().download('./imsi')
+
+print(title,"(",url,")", " 가 다운로드 완료 되었습니다.\n")
+print("#############################################################\n")
+출처: https://pagichacha.tistory.com/25 [파기차차:티스토리]
